@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+        .header {
+            color: #5b5b5b;
+        }
+
+        input {
+            display: block;
+            margin: 5px;
+        }
+        .container{
+          float: right;
+        }
+      a{
+        color: black;
+      }
+        a:hover{
+          color: #007BFF;
+  text-decoration: none;
+        }
+        #createDic{
+          margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+  <div class="container ">
+<!-- <div class="dictionary text-xs-center"> -->
+    <h1 class="header display-4">Создайте словарь</h1>
+
+    <p class="lead">Введите название файла:</p>
+    <input type="text" name="fi" id="fi">
+
+    <input type="button" id="createName" class="btn btn-primary"   value="Создать имя" onclick="filee() ">
+
+    <p class="lead">Введите количество слов:</p>
+    <input type="number" name="count" id="count" />
+
+    <input type="button" id="createForm" class="btn btn-primary"  value="Создать форму для ввода слов">
+    <div id="inps"></div>
+    <button id="createDic" class="btn btn-primary active" >Создать словарь</button>
+    <a href="" id="a" class="lead">Сохранить файл</a>
+  <!-- </div> -->
+ </div>
+    <script>
+        let words = '';
+        let fil
+
+
+
+        function filee() { // Создание имени для файла
+            let fi = document.getElementById('fi').value;
+            if (fi == '') {
+                fi = "document"
+            }
+            // else if(){
+            // fi = "document"
+            // }
+            return fil = fi + ".json"
+        }
+
+        function inputGenerate() { // Создание ячеек
+            let inps = document.getElementById("inps");
+            let count = document.getElementById("count").value;
+
+            for (let index = 0; index < count; index++) {
+
+                let input = document.createElement('input');
+                input.setAttribute('type', 'text');
+                input.setAttribute('class', 'word');
+                input.setAttribute('value', "key" + (index + 1));
+                input.className += " key";
+                inps.appendChild(input);
+
+            }
+            for (let index = 0; index < count; index++) {
+
+                let input = document.createElement('input');
+                input.setAttribute('type', 'text');
+                input.setAttribute('class', 'word');
+                input.setAttribute('value', "value" + (index + 1));
+                input.className += " value";
+                inps.appendChild(input);
+
+            }
+        }
+
+        function createWords(name, type) { // Функция создания самого файла
+            words = "{";
+            createStringWords();
+            words += "}";
+            let a = document.getElementById("a");
+            let file = new Blob([words], {
+                type: type
+            });
+            a.href = URL.createObjectURL(file);
+            a.download = name;
+        }
+
+        function createStringWords() { // Побочная функция создания самого файла
+            let arrWords = document.querySelectorAll('.word');
+            let keys = document.querySelectorAll('.key');
+            let values = document.querySelectorAll('.value');
+            console.log(arrWords);
+            let arr = [];
+            for (let index = 0; index < keys.length; index++) {
+
+                arr.push(`"${keys[index].value}"`);
+                arr.push(":");
+                arr.push(`"${values[index].value}"`);
+                if (index < (keys.length - 1)) {
+                    arr.push(",");
+                }
+
+            }
+            words += arr.join('');
+        }
+
+        document.getElementById("createDic").onclick = function () {
+            createWords(fil, 'text/plain');
+        };
+
+        document.getElementById("createForm").onclick = function () { // На клик вызов функции создания ячеек
+            inputGenerate();
+        };
+    </script>
+</body>
+
+</html
